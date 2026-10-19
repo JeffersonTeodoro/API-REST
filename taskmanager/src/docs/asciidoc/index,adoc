@@ -1,0 +1,165 @@
+= API REST — Documentação
+:toc: left
+:toc-title: Sumário
+:toclevels: 3
+:sectnums:
+:source-highlighter: highlightjs
+:icons: font
+:doctype: book
+:encoding: utf-8
+:lang: pt-BR
+
+== Visão geral
+
+Bem-vindo à documentação da API REST.
+
+Este projeto tem como objetivo disponibilizar operações por meio de endpoints HTTP, seguindo os princípios de uma API RESTful e utilizando JSON para troca de informações entre cliente e servidor.
+
+Repositório: https://github.com/JeffersonTeodoro/API-REST[GitHub — API-REST].
+
+== Tecnologias
+
+A documentação e os exemplos devem refletir as dependências efetivamente utilizadas no projeto. Na implementação Spring Boot, os principais componentes podem incluir:
+
+* Java
+* Spring Boot
+* Spring Web
+* Spring Data JPA
+* Bean Validation
+* Maven ou Gradle
+* JUnit e Spring REST Docs para testes e documentação
+
+== Convenções da API
+
+=== Formato das requisições
+
+As requisições que enviam um corpo JSON devem utilizar o cabeçalho:
+
+[source,http]
+----
+Content-Type: application/json
+----
+
+=== Formato das respostas
+
+As respostas com conteúdo JSON utilizam:
+
+[source,http]
+----
+Accept: application/json
+----
+
+=== Códigos HTTP
+
+[cols="1,3"]
+|===
+|Código |Descrição
+
+|200
+|Requisição processada com sucesso.
+
+|201
+|Recurso criado com sucesso.
+
+|204
+|Operação concluída sem conteúdo de resposta.
+
+|400
+|Requisição inválida ou dados de entrada incorretos.
+
+|401
+|Autenticação necessária ou inválida, quando aplicável.
+
+|403
+|Acesso proibido, quando aplicável.
+
+|404
+|Recurso não encontrado.
+
+|500
+|Erro interno inesperado.
+|===
+
+== Recursos da API
+
+Esta seção deve apresentar os endpoints implementados no projeto. Os exemplos abaixo utilizam os recursos de contas, operações financeiras e transações previstos para a API. Confirme os caminhos e os contratos com os controllers antes de publicar a documentação.
+
+=== Contas
+
+==== Criar conta
+
+Cria uma nova conta.
+
+include::{snippets}/create-account/auto-method.adoc[]
+
+include::{snippets}/create-account/http-request.adoc[]
+
+include::{snippets}/create-account/http-response.adoc[]
+
+==== Consultar conta por identificador
+
+Recupera uma conta específica.
+
+include::{snippets}/get-account-by-id/auto-method.adoc[]
+
+include::{snippets}/get-account-by-id/http-request.adoc[]
+
+include::{snippets}/get-account-by-id/http-response.adoc[]
+
+=== Operações financeiras
+
+==== Realizar depósito
+
+Registra um depósito em uma conta existente.
+
+include::{snippets}/deposit/auto-method.adoc[]
+
+include::{snippets}/deposit/http-request.adoc[]
+
+include::{snippets}/deposit/http-response.adoc[]
+
+==== Realizar saque
+
+Registra um saque em uma conta existente.
+
+include::{snippets}/withdrawal/auto-method.adoc[]
+
+include::{snippets}/withdrawal/http-request.adoc[]
+
+include::{snippets}/withdrawal/http-response.adoc[]
+
+=== Transações
+
+==== Consultar transações de uma conta
+
+Retorna as transações associadas a uma conta.
+
+include::{snippets}/get-account-transactions/auto-method.adoc[]
+
+include::{snippets}/get-account-transactions/http-request.adoc[]
+
+include::{snippets}/get-account-transactions/http-response.adoc[]
+
+== Testes e documentação automática
+
+O Spring REST Docs permite gerar documentação a partir de testes automatizados, mantendo os exemplos HTTP alinhados com as requisições e respostas verificadas.
+
+Para que os trechos incluídos neste documento sejam gerados corretamente:
+
+. Configure o Spring REST Docs no projeto.
+. Crie testes de integração para os endpoints.
+. Gere os snippets durante a execução dos testes.
+. Verifique se os nomes dos diretórios dos snippets correspondem aos utilizados nos comandos `include`.
+. Execute a tarefa de build que monta a documentação AsciiDoc.
+
+== Tratamento de erros
+
+A API deve retornar códigos HTTP coerentes com o resultado de cada operação e, quando houver um corpo de erro, documentar seu formato e os campos disponíveis.
+
+Os exemplos de erro devem ser obtidos das respostas reais da aplicação, evitando documentar propriedades que não existam no contrato implementado.
+
+== Considerações finais
+
+Esta documentação deve evoluir junto com a implementação da API. Sempre que um endpoint, campo de entrada, resposta ou código HTTP for alterado, atualize os testes e gere novamente os documentos.
+
+Projeto: https://github.com/JeffersonTeodoro/API-REST[API-REST — GitHub].

@@ -1,0 +1,65 @@
+package br.com.jefferson.taskmanager.infrastruture.http;
+
+import br.com.jefferson.taskmanager.application.*;
+import br.com.jefferson.taskmanager.domain.TaskId;
+import br.com.jefferson.taskmanager.infrastruture.http.reponse.TaskResponse;
+import br.com.jefferson.taskmanager.infrastruture.http.request.CreateTaskRequest;
+import br.com.jefferson.taskmanager.infrastruture.http.request.UpdateTaskRequest;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+
+@RestController
+@RequestMapping("/tasks")
+public class TaskController {
+
+    private final CreateTaskUseCase createTaskUseCase;
+    private final GetTasksUseCase getTasksUseCase;
+    private final GetTaskByIdUseCase getTaskByIdUseCase;
+    private final DeleteTaskUseCase deleteTaskUseCase;
+    private final UpdateTaskUseCase updateTaskUseCase;
+
+    public TaskController(CreateTaskUseCase createTaskUseCase, GetTasksUseCase getTasksUseCase, GetTaskByIdUseCase getTaskByIdUseCase, DeleteTaskUseCase deleteTaskUseCase, UpdateTaskUseCase updateTaskUseCase) {
+        this.createTaskUseCase = createTaskUseCase;
+        this.getTasksUseCase = getTasksUseCase;
+        this.getTaskByIdUseCase = getTaskByIdUseCase;
+        this.deleteTaskUseCase = deleteTaskUseCase;
+        this.updateTaskUseCase = updateTaskUseCase;
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    TaskResponse create(@RequestBody @Valid CreateTaskRequest request) {
+        var input = request.toInput();
+        var output =  createTaskUseCase.execute(input);
+        return TaskResponse.from(output);
+    }
+
+    @GetMapping
+    List<TaskResponse> list() {
+        return getTasksUseCase.execute().stream().map(TaskResponse::from).toList();
+    }
+
+    @GetMapping("/{id}")
+    TaskResponse read(@PathVariable UUID id) {
+        var output = getTaskByIdUseCase.execute(new TaskId(id));
+        return TaskResponse.from(output);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void delete(@PathVariable UUID id) {
+        deleteTaskUseCase.execute(new TaskId(id));
+    }
+
+    @PatchMapping("/{id}")
+    TaskResponse update(@PathVariable UUID id, @RequestBody UpdateTaskRequest request) {
+        var input = request.toInput();
+        var output = updateTaskUseCase.execute(new TaskId(id), input);
+        return TaskResponse.from(output);
+    }
+}
